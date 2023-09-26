@@ -24,4 +24,18 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// PUT /api/agentes/(_id)
+router.put("/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const agenteUpdate = await Agente.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    res.json({ result: agenteUpdate });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
