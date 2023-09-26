@@ -3,6 +3,12 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+require("./lib/connectMongoose");
+
+const Agente = require("./models/Agente");
+Agente.find().exec((err, results) => {
+  console.log(err, results);
+});
 
 var app = express();
 
@@ -27,6 +33,11 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
+  if (err.array) {
+    const errorInfo = err.errors[0];
+    err.message = `Error en ${errorInfo.location}`;
+    err.status = 422;
+  }
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
