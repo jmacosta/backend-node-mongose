@@ -50,11 +50,18 @@ app.use(function (err, req, res, next) {
     err.message = `Error en ${errorInfo.location}`;
     err.status = 422;
   }
+  // si lo que ha fallado es una petición al API
+  //responder con error en formato JSON
+  res.status(err.status || 500);
+  if (req.originalUrl.startsWith("/api")) {
+    res.json({ error: err.message });
+    return;
+  }
+
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
   res.render("error");
 });
 
