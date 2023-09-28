@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const basicAuthMiddleware = require("./lib/basicAuthMiddleware");
+const swaggerMiddleware = require("./lib/swaggerMiddleware");
 require("./lib/connectMongoose");
 
 const Agente = require("./models/Agente");
@@ -38,6 +39,11 @@ app.use("/api/agentes", basicAuthMiddleware, require("./routes/api/agentes"));
  */
 app.use("/", basicAuthMiddleware, require("./routes/index"));
 app.use("/users", basicAuthMiddleware, require("./routes/users"));
+
+/*
+Routes of documentation 
+*/
+app.use("/api-doc", swaggerMiddleware);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
