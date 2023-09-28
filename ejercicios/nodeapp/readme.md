@@ -5,3 +5,9 @@ From the folder of the server:
 ```sh
 ./bin/mongod --dbpath ./data
 ```
+
+Load intial data:
+
+```sh
+
+```

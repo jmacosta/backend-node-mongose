@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const basicAuthMiddleware = require("./lib/basicAuthMiddleware");
 require("./lib/connectMongoose");
 
 const Agente = require("./models/Agente");
@@ -30,13 +31,13 @@ app.use(express.static(path.join(__dirname, "public")));
 /*
  * Rutas del API
  */
-app.use("/api/agentes", require("./routes/api/agentes"));
+app.use("/api/agentes", basicAuthMiddleware, require("./routes/api/agentes"));
 
 /*
  * Rutas del website
  */
-app.use("/", require("./routes/index"));
-app.use("/users", require("./routes/users"));
+app.use("/", basicAuthMiddleware, require("./routes/index"));
+app.use("/users", basicAuthMiddleware, require("./routes/users"));
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
